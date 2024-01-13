@@ -1,29 +1,29 @@
 <template>
-  <q-page class="container flex flex-center">
+  <q-page class="flex flex-center q-py-lg">
     <main>
-      <q-btn
-        color="primary"
-        label="Go to About page"
-        @click="handleClickLogin"
-      />
-      <div class="cards-wrapper">
-        <template v-if="!products.length">
-          <q-spinner-gears size="100px" color="primary" />
-        </template>
-        <template v-else>
-          <CardProduct
-            v-for="item in (products as Product)"
-            :key="item.id"
-            :product="item"
-          />
-        </template>
-      </div>
+      <section>
+        <div class="container">
+          <div class="cards-wrapper">
+            <template v-if="!products.length">
+              <q-spinner-gears size="100px" color="primary" />
+            </template>
+            <template v-else>
+              <CardProduct
+                v-for="item in (products as Product)"
+                :key="item.id"
+                :product="item"
+                @click:buy="handleClickComprar"
+              />
+            </template>
+          </div>
+        </div>
+      </section>
     </main>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from 'vue';
+import { defineComponent, onMounted, watch, ref } from 'vue';
 import CardProduct from 'components/CardProduct.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
@@ -36,19 +36,19 @@ export default defineComponent({
     CardProduct,
   },
   setup() {
-    const { persistLogin, makeLogin, signOut } = useAuthStore();
+    const { persistLogin } = useAuthStore();
     const { user } = storeToRefs(useAuthStore());
 
     const { fetchProducts, createCheckoutSession } = useStripeStore();
 
     const { products } = storeToRefs(useStripeStore());
 
-    const handleClickLogin = (): void => {
-      if (user.value) {
-        signOut();
-      } else {
-        makeLogin();
+    const handleClickComprar = async (priceId: string, sessionId: string) => {
+      const userId = user.value?.uid;
+      if (!userId) {
+        throw new Error('User ID is required');
       }
+      await createCheckoutSession(userId, priceId, sessionId);
     };
 
     watch(
@@ -69,8 +69,8 @@ export default defineComponent({
     return {
       persistLogin,
       user,
-      handleClickLogin,
       products,
+      handleClickComprar,
     };
   },
 });
@@ -79,7 +79,12 @@ export default defineComponent({
 <style lang="scss">
 .cards-wrapper {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
+  @media (max-width: $breakpoint-xs-max) {
+    margin-top: 4rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 }
 </style>

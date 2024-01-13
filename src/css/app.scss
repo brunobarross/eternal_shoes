@@ -3,4 +3,8 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem;
+  @media (max-width: $breakpoint-xs-max) {
+    padding: 0 0.75rem;
+  }
 }

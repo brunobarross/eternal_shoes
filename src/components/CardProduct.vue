@@ -1,15 +1,28 @@
 <template>
-  <q-card class="my-card">
-    <img src="https://cdn.quasar.dev/img/mountains.jpg" />
-
-    <q-card-section class="column justify-center flex items-center">
+  <q-card class="card-produto">
+    <img
+      class="card-produto__img q-pa-md"
+      :src="
+        product.images.length
+          ? product.images
+          : 'https://placehold.co/600x400/EEE/31343C'
+      "
+    />
+    <q-card-section class="column justify-center flex items-center text-center">
       <div class="text-h6">{{ product.name }}</div>
-      <p class="text-subtitle2 q-mt-sm">{{ product.description }}</p>
-      <p class="text-subtitle2 q-ma-none">{{ price }}</p>
+      <p class="text-body2 q-mt-sm ellipsis-2-lines">
+        {{ product.description }}
+      </p>
+      <p class="text-subtitle2 q-ma-none">R$ {{ price.replace('.', ',') }}</p>
     </q-card-section>
 
-    <q-card-actions align="center" class="q-px-none q-pb-none">
-      <q-btn color="primary" label="Comprar" class="full-width" />
+    <q-card-actions align="center" class="q-px-none q-pb-none q-mt-auto">
+      <q-btn
+        color="primary"
+        label="Comprar"
+        class="btn-comprar"
+        @click="$emit('click:buy', product.priceId, product.id)"
+      />
     </q-card-actions>
   </q-card>
 </template>
@@ -25,5 +38,33 @@ const props = withDefaults(defineProps<Props>(), {
   product: () => ({} as Product),
 });
 
-const price = computed(() => props.product.price / 100);
+const emits = defineEmits(['click:buy']);
+
+const price = computed(() => (props.product.price / 100).toFixed(2));
 </script>
+
+<style lang="scss" scoped>
+.card-produto {
+  display: flex;
+  flex-direction: column;
+  @media (max-width: $breakpoint-xs-max) {
+    max-width: 80%;
+    width: 100%;
+    margin: 0 auto;
+  }
+  &__img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    margin: 0 auto;
+    @media (max-width: $breakpoint-xs-max) {
+      width: 200px;
+      height: 200px;
+    }
+  }
+  .btn-comprar {
+    width: 100%;
+    height: 3rem;
+  }
+}
+</style>
