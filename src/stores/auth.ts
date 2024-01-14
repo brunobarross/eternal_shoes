@@ -16,7 +16,6 @@ export const useAuthStore = defineStore('auth', () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         user.value = result.user;
         token.value = credential.accessToken;
-        saveUser(user.value);
       })
       .catch((error) => {
         // Handle Errors here.
