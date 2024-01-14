@@ -3,7 +3,6 @@ import {
   getDocs,
   setDoc,
   doc,
-  getDoc,
   where,
   query,
   onSnapshot,
@@ -11,15 +10,23 @@ import {
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { db } from '../services/firebase';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import axios from 'axios';
-import Stripe from 'stripe';
-import { loadStripe } from '@stripe/stripe-js';
 import { v4 as uuidv4 } from 'uuid';
-export const useStripeStore = defineStore('stripeStopre', () => {
+
+export const useStripeStore = defineStore('stripeStore', () => {
   const products = ref([]);
 
+  interface LoadingObj {
+    isLoading: boolean;
+    isLoadingCheckoutSession: boolean;
+  }
+
+  const loadingObj = ref<LoadingObj>({
+    isLoading: false,
+    isLoadingCheckoutSession: false,
+  });
+
   const fetchProducts = async () => {
+    loadingObj.value.isLoading = true;
     try {
       const productsCollection = query(
         collection(db, 'products'),
@@ -54,10 +61,13 @@ export const useStripeStore = defineStore('stripeStopre', () => {
       console.log(products.value);
     } catch (error) {
       console.error('Erro ao buscar os produtos:', error);
+    } finally {
+      loadingObj.value.isLoading = false;
     }
   };
 
   const createCheckoutSession = async (userId: string, priceId: string) => {
+    loadingObj.value.isLoadingCheckoutSession = true;
     try {
       const uuid = uuidv4();
       const checkoutSessionRef = doc(
@@ -87,12 +97,12 @@ export const useStripeStore = defineStore('stripeStopre', () => {
 
       onSnapshot(checkoutSessionRef, (snap) => {
         const { error, url } = snap.data();
-        console.log('url', url);
         if (error) {
           alert(`An error occurred: ${error.message}`);
         }
         if (url) {
           window.location.assign(url);
+          loadingObj.value.isLoadingCheckoutSession = false;
         }
       });
     } catch (err) {
@@ -104,5 +114,6 @@ export const useStripeStore = defineStore('stripeStopre', () => {
     products,
     fetchProducts,
     createCheckoutSession,
+    loadingObj,
   };
 });

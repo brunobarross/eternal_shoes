@@ -1,30 +1,30 @@
 <template>
-  <q-page class="flex flex-center q-py-lg">
-    <main>
-      <section>
-        <div class="container">
-          <div class="cards-wrapper">
-            <template v-if="!products.length">
-              <q-spinner-gears size="100px" color="primary" />
-            </template>
-            <template v-else>
-              <CardProduct
-                v-for="item in (products as Product)"
-                :key="item.id"
-                :product="item"
-                @click:buy="handleClickComprar"
-              />
-            </template>
-          </div>
+  <q-page class="q-py-lg" style="display: grid; align-items: center">
+    <section>
+      <div class="container">
+        <div class="cards-wrapper">
+          <template v-if="!products.length && loadingObj.isLoading">
+            <CardProductSkeleton v-for="i in 3" :key="i" />
+          </template>
+          <template v-else>
+            <CardProduct
+              v-for="item in (products as Product)"
+              :key="item.id"
+              :product="item"
+              :loading="loadingObj.isLoadingCheckoutSession"
+              @click:buy="handleClickComprar"
+            />
+          </template>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, watch, ref } from 'vue';
 import CardProduct from 'components/CardProduct.vue';
+import CardProductSkeleton from 'components/CardProductSkeleton.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
 import { useStripeStore } from 'src/stores/stripe';
@@ -34,6 +34,7 @@ export default defineComponent({
   name: 'IndexPage',
   components: {
     CardProduct,
+    CardProductSkeleton,
   },
   setup() {
     const { persistLogin } = useAuthStore();
@@ -41,14 +42,14 @@ export default defineComponent({
 
     const { fetchProducts, createCheckoutSession } = useStripeStore();
 
-    const { products } = storeToRefs(useStripeStore());
+    const { products, loadingObj } = storeToRefs(useStripeStore());
 
     const handleClickComprar = async (priceId: string, sessionId: string) => {
       const userId = user.value?.uid;
       if (!userId) {
         throw new Error('User ID is required');
       }
-      await createCheckoutSession(userId, priceId, sessionId);
+      await createCheckoutSession(userId, priceId);
     };
 
     watch(
@@ -71,6 +72,7 @@ export default defineComponent({
       user,
       products,
       handleClickComprar,
+      loadingObj,
     };
   },
 });

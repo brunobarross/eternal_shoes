@@ -7,15 +7,15 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 export const useAuthStore = defineStore('auth', () => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
-  const user = ref(null);
-  const token = ref(null);
+  const user = ref<object | null>(null);
+  const token = ref<string | null | undefined>(null);
 
   const makeLogin = async () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         user.value = result.user;
-        token.value = credential.accessToken;
+        token.value = credential?.accessToken;
         saveUser(user.value);
       })
       .catch((error) => {
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
       });
   };
 
-  const saveUser = async (user) => {
+  const saveUser = async (user: object) => {
     try {
       if (!user) return;
 

@@ -18,6 +18,7 @@
 
     <q-card-actions align="center" class="q-px-none q-pb-none q-mt-auto">
       <q-btn
+        :loading="loading"
         color="primary"
         label="Comprar"
         class="btn-comprar"
@@ -33,9 +34,11 @@ import { Product } from './models';
 
 interface Props {
   product?: Product;
+  loading?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
   product: () => ({} as Product),
+  loading: false,
 });
 
 const emits = defineEmits(['click:buy']);

@@ -1,8 +1,3 @@
-export interface Todo {
-  id: number;
-  content: string;
-}
-
 export interface Meta {
   totalCount: number;
 }
@@ -14,4 +9,13 @@ export interface Product {
   description: string;
   images: string;
   priceId: string;
+}
+
+export interface User {
+  accessToken: string;
+  uid: string;
+  displayName: string;
+  email: string;
+  photoURL: string;
+  auth: object;
 }
