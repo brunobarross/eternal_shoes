@@ -12,7 +12,7 @@
               :key="item.id"
               :product="item"
               :loading="loadingObj.isLoadingCheckoutSession"
-              @click:buy="handleClickComprar"
+              @click:cart="handleClickAddToCart"
             />
           </template>
         </div>
@@ -29,6 +29,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
 import { useStripeStore } from 'src/stores/stripe';
 import { Product } from 'src/stores/stripe/models';
+import { useCartStore } from 'src/stores/cart';
 
 export default defineComponent({
   name: 'IndexPage',
@@ -40,16 +41,16 @@ export default defineComponent({
     const { persistLogin } = useAuthStore();
     const { user } = storeToRefs(useAuthStore());
 
-    const { fetchProducts, createCheckoutSession } = useStripeStore();
+    const { fetchProducts } = useStripeStore();
 
     const { products, loadingObj } = storeToRefs(useStripeStore());
 
-    const handleClickComprar = async (priceId: string, sessionId: string) => {
-      const userId = user.value?.uid;
-      if (!userId) {
-        throw new Error('User ID is required');
-      }
-      await createCheckoutSession(userId, priceId);
+    const { addToCart } = useCartStore();
+
+    const { cart } = storeToRefs(useCartStore());
+
+    const handleClickAddToCart = (priceId: string, productId: string) => {
+      if (productId && priceId) addToCart(priceId, productId);
     };
 
     watch(
@@ -71,8 +72,10 @@ export default defineComponent({
       persistLogin,
       user,
       products,
-      handleClickComprar,
       loadingObj,
+      addToCart,
+      cart,
+      handleClickAddToCart,
     };
   },
 });

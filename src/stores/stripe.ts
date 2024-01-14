@@ -7,12 +7,15 @@ import {
   query,
   onSnapshot,
 } from 'firebase/firestore';
-import { defineStore } from 'pinia';
+import { defineStore, storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import { db } from '../services/firebase';
 import { v4 as uuidv4 } from 'uuid';
+import { Cart, Product } from 'src/components/models';
+import { useStripeStore } from './stripe';
 
 export const useStripeStore = defineStore('stripeStore', () => {
+  const { cart } = storeToRefs(useStripeStore());
   const products = ref([]);
 
   interface LoadingObj {
@@ -66,7 +69,7 @@ export const useStripeStore = defineStore('stripeStore', () => {
     }
   };
 
-  const createCheckoutSession = async (userId: string, priceId: string) => {
+  const createCheckoutSession = async (userId: string) => {
     loadingObj.value.isLoadingCheckoutSession = true;
     try {
       const uuid = uuidv4();
@@ -81,14 +84,13 @@ export const useStripeStore = defineStore('stripeStore', () => {
       await setDoc(
         checkoutSessionRef,
         {
-          line_items: [
-            {
-              price: priceId,
-              quantity: 1,
-            },
-          ],
+          line_items: cart.value.map((item) => {
+            return {
+              price: item.priceId,
+              quantity: item.quantity,
+            };
+          }),
           mode: 'payment',
-          price: priceId,
           success_url: window.location.origin,
           cancel_url: window.location.origin,
         },

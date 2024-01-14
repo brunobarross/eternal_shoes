@@ -20,9 +20,9 @@
       <q-btn
         :loading="loading"
         color="primary"
-        label="Comprar"
+        label="Adicionar ao carrinho"
         class="btn-comprar"
-        @click="$emit('click:buy', product.priceId, product.id)"
+        @click="() => $emit('click:cart', product.priceId, product.id)"
       />
     </q-card-actions>
   </q-card>
@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
 });
 
-const emits = defineEmits(['click:buy']);
+const emits = defineEmits(['click:cart']);
 
 const price = computed(() => (props.product.price / 100).toFixed(2));
 </script>

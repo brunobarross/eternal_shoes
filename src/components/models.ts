@@ -3,7 +3,7 @@ export interface Meta {
 }
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
   description: string;
@@ -18,4 +18,11 @@ export interface User {
   email: string;
   photoURL: string;
   auth: object;
+}
+
+export interface Cart {
+  priceId: string;
+  quantity: number;
+  productId: string;
+  price: number;
 }
