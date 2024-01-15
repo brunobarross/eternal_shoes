@@ -1,54 +1,60 @@
 <template>
-  <q-page class="container flex flex-center">
-    <main>
-      <q-btn
-        color="primary"
-        label="Go to About page"
-        @click="handleClickLogin"
-      />
-      <div class="cards-wrapper">
-        <template v-if="!products.length">
-          <q-spinner-gears size="100px" color="primary" />
-        </template>
-        <template v-else>
-          <CardProduct
-            v-for="item in (products as Product)"
-            :key="item.id"
-            :product="item"
-          />
-        </template>
+  <q-page class="q-py-lg" style="display: grid; align-items: center">
+    <section :style="{ marginTop: $q.screen.lt.sm ? '2rem' : '' }">
+      <div class="container">
+        <h3 class="text-h4 q-ma-none">Produtos</h3>
+        <p class="text-subtitle1 q-mt-sm">
+          Conheça nossos produtos e adquira já o seu!
+        </p>
+        <div class="cards-wrapper">
+          <template v-if="!products.length && loadingObj.isLoading">
+            <CardProductSkeleton v-for="i in 3" :key="i" />
+          </template>
+          <template v-else>
+            <CardProduct
+              v-for="item in (products as Product)"
+              :key="item.id"
+              :product="item"
+              :loading="loadingObj.isLoadingCheckoutSession"
+              @click:cart="handleClickAddToCart"
+            />
+          </template>
+        </div>
       </div>
-    </main>
+    </section>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, watch } from 'vue';
+import { defineComponent, onMounted, watch, ref } from 'vue';
 import CardProduct from 'components/CardProduct.vue';
+import CardProductSkeleton from 'components/CardProductSkeleton.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { storeToRefs } from 'pinia';
 import { useStripeStore } from 'src/stores/stripe';
 import { Product } from 'src/stores/stripe/models';
+import { useCartStore } from 'src/stores/cart';
 
 export default defineComponent({
   name: 'IndexPage',
   components: {
     CardProduct,
+    CardProductSkeleton,
   },
   setup() {
-    const { persistLogin, makeLogin, signOut } = useAuthStore();
+    const { persistLogin } = useAuthStore();
     const { user } = storeToRefs(useAuthStore());
 
-    const { fetchProducts, createCheckoutSession } = useStripeStore();
+    const { fetchProducts } = useStripeStore();
 
-    const { products } = storeToRefs(useStripeStore());
+    const { products, loadingObj } = storeToRefs(useStripeStore());
 
-    const handleClickLogin = (): void => {
-      if (user.value) {
-        signOut();
-      } else {
-        makeLogin();
-      }
+    const { addToCart } = useCartStore();
+
+    const { cart } = storeToRefs(useCartStore());
+
+    const handleClickAddToCart = (priceId: string, productId: string) => {
+      if (productId && priceId) addToCart(priceId, productId);
     };
 
     watch(
@@ -69,8 +75,11 @@ export default defineComponent({
     return {
       persistLogin,
       user,
-      handleClickLogin,
       products,
+      loadingObj,
+      addToCart,
+      cart,
+      handleClickAddToCart,
     };
   },
 });
@@ -79,7 +88,13 @@ export default defineComponent({
 <style lang="scss">
 .cards-wrapper {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
+  margin-top: 3rem;
+  @media (max-width: $breakpoint-xs-max) {
+    margin-top: 2rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 }
 </style>
