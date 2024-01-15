@@ -3,7 +3,7 @@
 
 A plataforma fictícia "Eternal Shoes" foi desenvolvida com Typescript, Vue.js e Quasar Framework no front-end, utilizando Firebase como back-end e integração com o Stripe por meio de webhooks para o processamento de pagamentos. O sistema permite aos usuários autenticarem-se, adicionar produtos ao carrinho de compras, remover itens do carrinho e realizar pagamentos fictícios com segurança através do Stripe.
 
-## FORMA DE PAGAMENTO FICTICIA PARA TESTE
+## Dados de pagamento para teste
 
 - Número do Cartão: 4242 4242 4242 4242
 - Validade: Qualquer uma que seja maior que a do ano em que estamos.
