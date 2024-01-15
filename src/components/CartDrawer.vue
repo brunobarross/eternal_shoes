@@ -51,7 +51,7 @@
           color="primary"
           class="full-width"
           :size="$q.screen.lt.sm ? 'md' : 'lg'"
-          :disabled="!cart.length && user?.uid"
+          :disabled="!cart.length && !user?.uid"
           @click="handleClickComprar"
         />
       </div>
