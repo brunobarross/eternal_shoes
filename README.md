@@ -5,9 +5,9 @@ A plataforma fictícia "Eternal Shoes" foi desenvolvida com Typescript, Vue.js e
 
 ##FORMA DE PAGAMENTO FICTICIA PARA TESTE
 
-- [Cartão]: 4242 4242 4242 4242
-- [Validade]: Qualquer uma que seja maior que a do ano em que estamos.
-- [CVV]: 3 digitos qualquer.
+- Número do Cartão: 4242 4242 4242 4242
+- Validade: Qualquer uma que seja maior que a do ano em que estamos.
+- CVV: 3 digitos qualquer.
 
 
 ## Índice
