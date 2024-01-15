@@ -57,16 +57,6 @@ export default defineComponent({
       if (productId && priceId) addToCart(priceId, productId);
     };
 
-    watch(
-      () => products,
-      (v) => {
-        console.log(v);
-      },
-      {
-        immediate: true,
-      }
-    );
-
     onMounted(async () => {
       await persistLogin();
       await fetchProducts();

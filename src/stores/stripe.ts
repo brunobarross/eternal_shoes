@@ -59,7 +59,6 @@ export const useStripeStore = defineStore('stripeStore', () => {
       });
 
       products.value = await Promise.all(productsPromises);
-      console.log(products.value);
     } catch (error) {
       console.error('Erro ao buscar os produtos:', error);
     } finally {

@@ -86,7 +86,6 @@ const total = computed(() => {
   if (!cart.value.length) return '0,00';
   return (
     cart.value.reduce((acc, curr) => {
-      console.log(acc, curr);
       return acc + curr.price * curr.quantity;
     }, 0) / 100
   ).toFixed(2);
@@ -104,7 +103,6 @@ const handleClickComprar = async () => {
 };
 
 const handleClickRemove = (priceId: string) => {
-  console.log(priceId);
   removeFromCart(priceId);
 };
 </script>
