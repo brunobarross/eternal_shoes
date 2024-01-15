@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBbkgzplC6-dVFS1WtlT94i1Cef8YzghKg',
+  apiKey: process.env.GOOGLE_API_KEY,
   authDomain: 'shopping-cc6d3.firebaseapp.com',
   projectId: 'shopping-cc6d3',
   storageBucket: 'shopping-cc6d3.appspot.com',
