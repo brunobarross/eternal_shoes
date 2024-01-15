@@ -10,9 +10,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/IndexPage.vue'),
       },
       {
-        path: '/sucess',
-        name: 'sucess',
+        path: '/success',
+        name: 'success',
         component: () => import('pages/SucessPage.vue'),
+      },
+      {
+        path: '/cancel',
+        name: 'cancel',
+        component: () => import('pages/CancelPage.vue'),
       },
     ],
   },

@@ -88,8 +88,8 @@ export const useStripeStore = defineStore('stripeStore', () => {
             };
           }),
           mode: 'payment',
-          success_url: window.location.origin,
-          cancel_url: window.location.origin,
+          success_url: `${window.location.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${window.location.origin}/cancel`,
         },
         { merge: true }
       );

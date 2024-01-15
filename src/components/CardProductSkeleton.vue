@@ -21,14 +21,10 @@
 .card-produto {
   display: flex;
   flex-direction: column;
-  @media (max-width: $breakpoint-xs-max) {
-    max-width: 80%;
-    width: 100%;
-    margin: 0 auto;
-  }
+
   &__img {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     margin: 0 auto;
     @media (max-width: $breakpoint-xs-max) {

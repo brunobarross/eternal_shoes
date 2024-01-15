@@ -4,13 +4,13 @@
       <div class="container">
         <div class="column flex-center">
           <p
-            class="text-h2 text-center text-green-8 text-weight-bold"
+            class="text-h2 text-center text-negative text-weight-bold"
             :class="$q.screen.gt.xs ? 'text-h2' : 'text-h3'"
           >
-            Compra efetuada com sucesso!
+            O pedido foi cancelado!
           </p>
           <p class="text-subtitle1 text-center">
-            Obrigado por comprar conosco!
+            Você pode tentar novamente ou entrar em contato com o suporte.
           </p>
           <q-btn
             class="q-mt-md"

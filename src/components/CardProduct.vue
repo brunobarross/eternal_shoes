@@ -52,8 +52,8 @@ const price = computed(() => (props.product.price / 100).toFixed(2));
   flex-direction: column;
 
   &__img {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     margin: 0 auto;
     @media (max-width: $breakpoint-xs-max) {

@@ -14,23 +14,57 @@
                 class="row flex-center"
                 :class="$q.screen.lt.sm ? 'q-mr-none' : ' q-mr-md'"
               >
-                <q-avatar>
-                  <img
-                    :src="
-                      user?.photoURL
-                        ? user?.photoURL
-                        : 'https://cdn.quasar.dev/img/avatar.png'
-                    "
-                  />
-                </q-avatar>
-                <p class="q-ml-sm q-mb-none">
+                <q-btn flat round>
+                  <q-avatar>
+                    <img
+                      :src="
+                        user?.photoURL
+                          ? user?.photoURL
+                          : 'https://cdn.quasar.dev/img/avatar.png'
+                      "
+                    />
+                  </q-avatar>
+                </q-btn>
+
+                <p v-if="$q.screen.gt.sm" class="q-ml-sm q-mb-none">
                   Bem vindo, {{ user ? user.displayName : 'visitante' }}
                 </p>
+                <q-menu
+                  v-if="$q.screen.lt.sm"
+                  fit
+                  auto-close
+                  :content-class="$q.dark.isActive ? 'bg-grey-8' : 'bg-grey-1'"
+                >
+                  <q-list>
+                    <q-item clickable v-ripple>
+                      <q-item-section>
+                        <q-item-label caption>
+                          <p
+                            class="q-mb-none q-mt-none q-ma-none text-subtitle2"
+                          >
+                            Bem vindo,
+                            {{ user ? user.displayName : 'visitante' }}
+                          </p>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-item clickable v-ripple>
+                      <q-item-section>
+                        <q-item-label caption>
+                          <p class="q-mb-none q-mt-none q-ma-none text-body2">
+                            Meus pedidos
+                          </p>
+                        </q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
               </div>
               <q-btn
                 flat
                 :label="user ? 'Sair' : 'Entrar'"
-                class="q-mr-lg"
+                :class="$q.screen.lt.sm ? 'q-mr-none' : ' q-mr-md'"
+                :size="$q.screen.lt.sm ? 'sm' : 'md'"
                 @click="handleClickLogin"
               />
             </div>
