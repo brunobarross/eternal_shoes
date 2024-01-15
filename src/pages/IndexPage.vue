@@ -39,7 +39,7 @@ import { useMeta } from 'quasar';
 const metaData = {
   // sets document title
   title: 'Eternal Shoes',
-  titleTemplate: (title: string) => `${title} - My Website`,
+  titleTemplate: (title: string) => `${title} - Home`,
 
   meta: {
     description: {
