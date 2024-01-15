@@ -3,7 +3,9 @@
     <q-header elevated class="q-py-md">
       <div class="container">
         <q-toolbar>
-          <q-toolbar-title> Eternal Shoes </q-toolbar-title>
+          <q-toolbar-title style="cursor: pointer" @click="$router.push('/')">
+            Eternal Shoes
+          </q-toolbar-title>
           <div class="row">
             <div
               class="row flex-center"

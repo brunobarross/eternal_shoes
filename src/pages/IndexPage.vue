@@ -34,6 +34,37 @@ import { storeToRefs } from 'pinia';
 import { useStripeStore } from 'src/stores/stripe';
 import { Product } from 'src/stores/stripe/models';
 import { useCartStore } from 'src/stores/cart';
+import { useMeta } from 'quasar';
+
+const metaData = {
+  // sets document title
+  title: 'Eternal Shoes',
+  titleTemplate: (title: string) => `${title} - My Website`,
+
+  meta: {
+    description: {
+      name: 'description',
+      content: 'Compre os melhores produtos aqui!',
+    },
+    keywords: { name: 'keywords', content: 'Quasar website' },
+    equiv: {
+      'http-equiv': 'Content-Type',
+      content: 'text/html; charset=UTF-8',
+    },
+    ogTitle: {
+      property: 'og:title',
+      template(ogTitle: string) {
+        return `${ogTitle} - Home`;
+      },
+    },
+  },
+
+  // <body> attributes
+  bodyAttr: {
+    'action-scope': 'xyz', // generates <body action-scope="xyz">
+    empty: undefined, // generates <body empty>
+  },
+};
 
 export default defineComponent({
   name: 'IndexPage',
@@ -42,6 +73,7 @@ export default defineComponent({
     CardProductSkeleton,
   },
   setup() {
+    useMeta(metaData);
     const { persistLogin } = useAuthStore();
     const { user } = storeToRefs(useAuthStore());
 
